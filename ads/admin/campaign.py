@@ -15,7 +15,7 @@ class BannerInline(admin.TabularInline[Banner]):
     extra = 0
     can_delete = False
     show_change_link = True
-    readonly_fields = ['name', 'is_active', 'created_at']
+    fields = readonly_fields = ['name', 'is_active', 'created_at']
 
     def has_add_permission(self, request: HttpRequest, obj: Banner | None = None):
         return False
@@ -66,6 +66,7 @@ class CampaignAdmin(admin.ModelAdmin[Campaign]):
                     client__user2client__role__in=[
                         User2Client.ClientStaffRoles.ADMIN,
                         User2Client.ClientStaffRoles.EDITOR,
+                        User2Client.ClientStaffRoles.READER,
                     ],
                 )
             ).distinct()

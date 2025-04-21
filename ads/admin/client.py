@@ -74,7 +74,7 @@ class CampaignInline(admin.TabularInline[Campaign]):
             return 'Завершена'
         return 'Активна'
 
-    status.short_description = 'Статус'
+    status.short_description = 'Статус'  # pyright: ignore[reportFunctionMemberAccess]
 
     def has_add_permission(self, request: HttpRequest, obj: Campaign | None = None):
         return False  # Полностью запретить добавление

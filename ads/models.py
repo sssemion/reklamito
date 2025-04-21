@@ -63,3 +63,6 @@ class Banner(models.Model):
     content = models.JSONField[dict[str, Any]]('Контент')
     is_active = models.BooleanField('Активен', default=True)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name
