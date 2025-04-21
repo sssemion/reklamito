@@ -8,6 +8,7 @@ from django.forms import ModelChoiceField, ModelForm
 from django.http import HttpRequest
 
 from ads.models import Banner, Campaign, Client, User2Client
+from ads.permissions import check_client_permission
 
 
 class BannerInline(admin.TabularInline[Banner]):
@@ -32,23 +33,24 @@ class CampaignAdmin(admin.ModelAdmin[Campaign]):
         if request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
             return True
         if obj:
-            if obj.client.owner == request.user:
-                return True
-            for u2c in User2Client.objects.filter(client=obj.client):
-                if u2c.user == request.user and u2c.role in (
-                    User2Client.ClientStaffRoles.ADMIN,
-                    User2Client.ClientStaffRoles.EDITOR,
-                ):
-                    return True
-        return False
+            return check_client_permission(
+                request.user,  # pyright: ignore[reportArgumentType]
+                obj.client,
+                (User2Client.ClientStaffRoles.ADMIN, User2Client.ClientStaffRoles.EDITOR),
+            )
+        return super().has_change_permission(request, obj)
 
     def has_view_permission(self, request: HttpRequest, obj: Campaign | None = None) -> bool:
-        if request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
-            return True
         if obj:
-            if obj.client.owner == request.user:
-                return True
-            return request.user in obj.client.staff.all()
+            return check_client_permission(
+                request.user,  # pyright: ignore[reportArgumentType]
+                obj.client,
+                (
+                    User2Client.ClientStaffRoles.ADMIN,
+                    User2Client.ClientStaffRoles.EDITOR,
+                    User2Client.ClientStaffRoles.READER,
+                ),
+            )
         return True
 
     def get_inlines(self, request: HttpRequest, obj: Campaign | None) -> list[type[InlineModelAdmin[Any]]]:

@@ -42,7 +42,7 @@ class BannerAdmin(admin.ModelAdmin[Banner]):
             )
         return super().has_change_permission(request, obj)
 
-    def has_view_permission(self, request: HttpRequest, obj: Banner | None = None):
+    def has_view_permission(self, request: HttpRequest, obj: Banner | None = None) -> bool:
         if obj:
             return check_client_permission(
                 request.user,  # pyright: ignore[reportArgumentType]

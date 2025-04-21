@@ -11,6 +11,7 @@ from django.http import HttpRequest
 from django.utils.timezone import now
 
 from ads.models import Campaign, Client, User2Client
+from ads.permissions import check_client_permission
 
 admin.site.unregister(Group)
 
@@ -105,20 +106,24 @@ class ClientAdmin(admin.ModelAdmin[Client]):
         if request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
             return True
         if obj:
-            if obj.owner == request.user:
-                return True
-            for u2c in User2Client.objects.filter(client=obj):
-                if u2c.user == request.user and u2c.role == User2Client.ClientStaffRoles.ADMIN:
-                    return True
-        return False
+            return check_client_permission(
+                request.user,  # pyright: ignore[reportArgumentType]
+                obj,
+                (User2Client.ClientStaffRoles.ADMIN,),
+            )
+        return super().has_change_permission(request, obj)
 
     def has_view_permission(self, request: HttpRequest, obj: Client | None = None) -> bool:
-        if request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
-            return True
         if obj:
-            if obj.owner == request.user:
-                return True
-            return request.user in obj.staff.all()
+            return check_client_permission(
+                request.user,  # pyright: ignore[reportArgumentType]
+                obj,
+                (
+                    User2Client.ClientStaffRoles.ADMIN,
+                    User2Client.ClientStaffRoles.EDITOR,
+                    User2Client.ClientStaffRoles.READER,
+                ),
+            )
         return True
 
     def get_formset_kwargs(
