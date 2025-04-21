@@ -16,8 +16,10 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path, reverse_lazy
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    re_path(r'^$', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('admin/', admin.site.urls),
 ]
