@@ -1,0 +1,23 @@
+[project]
+name = "reklamito"
+version = "0.1.0"
+description = "serviso for la pubblicazione reklamitos su Interneto"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2",
+    "django-environ>=0.12.0",
+    "django-json-widget>=2.0.1",
+    "django-stubs-ext>=5.1.3",
+    "django-types>=0.20.0",
+    "psycopg2>=2.9.10",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+skip-magic-trailing-comma = false
