@@ -49,6 +49,9 @@ class Campaign(models.Model):
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
     updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Banner(models.Model):
     class Meta:

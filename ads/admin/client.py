@@ -8,8 +8,9 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest
+from django.utils.timezone import now
 
-from ads.models import Client, User2Client
+from ads.models import Campaign, Client, User2Client
 
 admin.site.unregister(Group)
 
@@ -57,6 +58,31 @@ class User2ClientInline(admin.TabularInline[User2Client]):
         return super().get_formset(request, obj, **kwargs)
 
 
+class CampaignInline(admin.TabularInline[Campaign]):
+    model = Campaign
+    extra = 0
+    max_num = 0
+    can_delete = False
+    show_change_link = True
+    readonly_fields = ('name', 'author', 'budget', 'start_date', 'end_date', 'is_active', 'status')
+
+    def status(self, obj: Campaign) -> str:
+        today = now().date()
+        if obj.start_date > today:
+            return 'Запланирована'
+        elif obj.end_date < today:
+            return 'Завершена'
+        return 'Активна'
+
+    status.short_description = 'Статус'
+
+    def has_add_permission(self, request: HttpRequest, obj: Campaign | None = None):
+        return False  # Полностью запретить добавление
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Campaign]:
+        return super().get_queryset(request).select_related('author')
+
+
 class ClientCreationForm(forms.ModelForm):
     class Meta:
         model = Client
@@ -66,7 +92,7 @@ class ClientCreationForm(forms.ModelForm):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin[Client]):
     form = ClientCreationForm
-    inlines = [User2ClientInline]
+    inlines = [User2ClientInline, CampaignInline]
     list_display = ('name', 'tax_id', 'owner', 'created_at', 'hidden')
     list_filter = ('hidden', 'created_at')
     search_fields = ('name', 'tax_id')
@@ -127,7 +153,7 @@ class ClientAdmin(admin.ModelAdmin[Client]):
         return readonly
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Client]:
-        qs = super().get_queryset(request)
+        qs = super().get_queryset(request).prefetch_related('campaign_set')
         if not request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
             return (
                 qs.filter(hidden=False)
