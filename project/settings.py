@@ -15,6 +15,8 @@ from typing import Any
 
 import environ  # pyright: ignore
 
+from myauth.settings import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_json_widget',
     'ads',
+    'myauth',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES: list[dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
