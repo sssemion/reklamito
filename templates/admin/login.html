@@ -1,0 +1,14 @@
+{% extends "admin/login.html" %}
+{% load i18n static %}
+
+{% block content %}
+{{ block.super }}
+
+{% if not user.is_authenticated %}
+<div class="signup" style="float: left; width: 100%; display: flex; justify-content: center; text-align: center; margin-top: 20px;">
+    <a href="{% url 'signup' %}" style="float: left; background: #79aec8; padding: 10px 15px; color: white; text-decoration: none; border-radius: 4px;">
+        {% trans 'Зарегистрироваться' %}
+    </a>
+</div>
+{% endif %}
+{% endblock %}
