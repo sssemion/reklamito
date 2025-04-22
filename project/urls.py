@@ -16,13 +16,15 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, re_path, reverse_lazy
+from django.urls import include, path, re_path, reverse_lazy
 from django.views.generic.base import RedirectView
 
+import ads.urls
 from myauth.views import SignUpView
 
 urlpatterns = [
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('admin:index'))),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('admin/', admin.site.urls),
+    path('ads/', include(ads.urls)),
 ]
