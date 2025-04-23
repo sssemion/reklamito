@@ -53,6 +53,6 @@ DATABASE=reklamito
 
 ### Интеграция с DataLens для ClickHouse:
 
-Используйте готовый коннектор для подключения аналитики
+Используйте готовое **подключение**: https://datalens.yandex/y9tv7j3nosf8k
 
-TBD
+Или **датасет** с показами и кликами: https://datalens.yandex/zauxzatjcweel
