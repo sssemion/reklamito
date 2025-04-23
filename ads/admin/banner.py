@@ -87,13 +87,11 @@ class BannerAdmin(admin.ModelAdmin[Banner]):
                 ).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def get_clicks(self, request: HttpRequest, obj: Banner | None = None):
-        if obj:
-            return REDIS_CLIENT.get_clicks(obj.pk)
+    def clicks(self, obj: Banner) -> int | None:
+        return REDIS_CLIENT.get_clicks(obj.pk)
 
-    def get_shows(self, request: HttpRequest, obj: Banner | None = None):
-        if obj:
-            return REDIS_CLIENT.get_shows(obj.pk)
+    def shows(self, obj: Banner) -> int | None:
+        return REDIS_CLIENT.get_shows(obj.pk)
 
     def get_readonly_fields(self, request: HttpRequest, obj: Banner | None = None):
         readonly = ['created_at', 'clicks', 'shows']
