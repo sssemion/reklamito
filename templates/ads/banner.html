@@ -2,31 +2,166 @@
 <html>
 <head>
     <title>{{ banner.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        :root {
+            --primary-color: {{ banner.content.style.primary_color|default:"#4a6bff" }};
+            --secondary-color: {{ banner.content.style.secondary_color|default:"#f8f9fa" }};
+            --text-color: {{ banner.content.style.text_color|default:"#333333" }};
+            --border-radius: {{ banner.content.style.border_radius|default:"8px" }};
+            --animation-duration: 0.3s;
+            --default-width: {{ banner.content.width|default:"728" }}px;
+            --default-height: {{ banner.content.height|default:"90" }}px;
+
+            /* Новые переменные для бейджа и брендинга */
+            --badge-bg-color: {{ banner.content.style.badge_bg_color|default:"#ff4757" }};
+            --badge-text-color: {{ banner.content.style.badge_text_color|default:"white" }};
+            --badge-padding: {{ banner.content.style.badge_padding|default:"6px 12px" }};
+            --branding-padding: {{ banner.content.style.branding_padding|default:"12px 20px" }};
+            --branding-font-size: {{ banner.content.style.branding_font_size|default:"0.8rem" }};
+        }
+
         .banner-container {
             position: relative;
+            width: 100%;
+            max-width: var(--default-width);
+            min-height: var(--default-height);
+            margin: 24px auto;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform var(--animation-duration) ease;
+            background: var(--secondary-color);
         }
-        .banner-tracking {
-            display: none;
+
+        .banner-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--badge-bg-color);
+            color: var(--badge-text-color);
+            padding: var(--badge-padding);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            line-height: 1;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .banner-footer {
+            padding: var(--branding-padding);
+            background: rgba(0, 0, 0, 0.03);
+            font-size: var(--branding-font-size);
+            color: #666;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Остальные стили остаются без изменений */
+        .banner-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .banner-link {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .banner-content {
+            padding: 20px;
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .banner-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .banner-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            display: block;
+        }
+
+        .banner-button {
+            background: var(--primary-color);
+            color: {{ banner.content.style.button_text_color|default:"white" }};
+            border: none;
+            padding: {{ banner.content.style.button_padding|default:"10px 20px" }};
+            border-radius: {{ banner.content.style.button_border_radius|default:"4px" }};
+            cursor: pointer;
+            font-weight: 600;
+            width: {{ banner.content.style.button_width|default:"auto" }};
+            margin-top: auto;
+            align-self: flex-start;
         }
     </style>
 </head>
 <body>
     <div class="banner-container">
-        <a href="{{ click_url }}" class="banner-link">
-            {% if banner.content.title %}
-                <h3>{{ banner.content.title }}</h3>
-            {% endif %}
-            {% if banner.content.text %}
-                <p>{{ banner.content.text }}</p>
-            {% endif %}
+        {% if banner.content.badge_text %}
+            <div class="banner-badge">{{ banner.content.badge_text }}</div>
+        {% endif %}
+
+        <a href="{{ click_url }}" class="banner-link" target="_blank" rel="noopener noreferrer">
             {% if banner.content.image_url %}
-            <img src="{{ banner.content.image_url }}" alt="{{ banner.content.image_alt_text }}">
+                <img src="{{ banner.content.image_url }}"
+                     class="banner-image"
+                     alt="{{ banner.content.image_alt_text|default:banner.content.title }}"
+                     loading="lazy"
+                     style="
+                         width: {{ banner.content.image_width|default:"100%" }};
+                         height: {{ banner.content.image_height|default:"auto" }};
+                         object-fit: {{ banner.content.image_fit|default:"cover" }};
+                     ">
             {% endif %}
+
+            <div class="banner-content">
+                {% if banner.content.title %}
+                    <h3 class="banner-title">{{ banner.content.title }}</h3>
+                {% endif %}
+
+                {% if banner.content.text %}
+                    <div class="banner-text">{{ banner.content.text }}</div>
+                {% endif %}
+
+                {% if banner.content.button_text %}
+                    <button class="banner-button">
+                        {{ banner.content.button_text }}
+                    </button>
+                {% endif %}
+            </div>
         </a>
 
+        {% if banner.content.show_branding %}
+            <div class="banner-footer">
+                Реклама · {{ banner.content.advertiser_name|default:"Наш партнер" }}
+            </div>
+        {% endif %}
+
         <!-- Скрытые параметры для аналитики -->
-        <div class="banner-tracking" data-show-uuid="{{ show_uuid }}"></div>
+        <div class="banner-tracking"
+             data-show-uuid="{{ show_uuid }}"
+             data-banner-id="{{ banner.id }}"
+             data-campaign-id="{{ banner.campaign_id }}"></div>
     </div>
 </body>
 </html>
