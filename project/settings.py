@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django_json_widget',
     'ads',
     'myauth',
+    'billing',
+    'experiments',
 ]
 
 MIDDLEWARE = [
