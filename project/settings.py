@@ -15,6 +15,7 @@ from typing import Any
 
 import environ  # pyright: ignore
 
+from ads.settings import *
 from myauth.settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,3 +131,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# apps
+CH_HOST: str = env.str('CH_HOST')  # pyright: ignore
+CH_PORT: int = env.int('CH_PORT')  # pyright: ignore
+CH_USER: str = env.str('CH_USER')  # pyright: ignore
+CH_DATABASE: str = env.str('CH_DATABASE')  # pyright: ignore
+CH_PASSWORD: str = env.str('CH_PASSWORD')  # pyright: ignore
+_ch_ssl_cert_path: str | None = env.str('CH_SSL_CERTIFICATE_PATH', None)  # pyright: ignore
+CH_SSL_CERTIFICATE_PATH: Path | None = Path(_ch_ssl_cert_path) if _ch_ssl_cert_path else None  # pyright: ignore

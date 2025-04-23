@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ banner.title }}</title>
+    <style>
+        .banner-container {
+            position: relative;
+        }
+        .banner-tracking {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <a href="{{ click_url }}" class="banner-link">
+            {% if banner.content.title %}
+                <h3>{{ banner.content.title }}</h3>
+            {% endif %}
+            {% if banner.content.text %}
+                <p>{{ banner.content.text }}</p>
+            {% endif %}
+            {% if banner.content.image_url %}
+            <img src="{{ banner.content.image_url }}" alt="{{ banner.content.image_alt_text }}">
+            {% endif %}
+        </a>
+
+        <!-- Скрытые параметры для аналитики -->
+        <div class="banner-tracking" data-show-uuid="{{ show_uuid }}"></div>
+    </div>
+</body>
+</html>
