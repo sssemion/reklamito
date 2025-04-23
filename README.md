@@ -52,10 +52,7 @@ DATABASE=reklamito
 **SSL-сертификаты обязательны для всех подключений**: [Инструкция по установке сертификатов Yandex Cloud](https://yandex.cloud/ru/docs/managed-clickhouse/operations/connect/#configure-ssl)
 
 ### Интеграция с DataLens для ClickHouse:
-
-Используйте готовое **подключение**: https://datalens.yandex/y9tv7j3nosf8k
-
-Или **датасет** с показами и кликами: https://datalens.yandex/zauxzatjcweel
+К кластеру есть доступ из DataLens, пример чарта: https://datalens.yandex/zauyucxm5ddml
 
 ## Key-Value хранилище
 

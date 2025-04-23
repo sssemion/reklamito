@@ -89,6 +89,7 @@ def handle_click(request: HttpRequest, banner_id: int) -> HttpResponse:
     click_time = now()
     time_to_click = (click_time.timestamp() - show_time) if show_time else None
 
+    # Логируем клик
     try:
         CH_CLIENT.log_click(
             show_event_id=uuid.UUID(show_uuid),
