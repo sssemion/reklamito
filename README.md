@@ -56,3 +56,11 @@ DATABASE=reklamito
 Используйте готовое **подключение**: https://datalens.yandex/y9tv7j3nosf8k
 
 Или **датасет** с показами и кликами: https://datalens.yandex/zauxzatjcweel
+
+## Key-Value хранилище
+
+### ValKey (Redis)
+**Модель данных**: Key-Value
+**Назначение**:
+- Счетчик показов и кликов в реальном времени
+- Кеш

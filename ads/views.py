@@ -12,6 +12,7 @@ from django.utils.timezone import now
 
 from ads.ch import CH_CLIENT, ClickHouseWriteError, DeviceType
 from ads.models import Banner
+from ads.redis import REDIS_CLIENT
 
 
 def _get_client_ip(request: HttpRequest) -> str | None:
@@ -55,6 +56,12 @@ def show_banner(request: HttpRequest, banner_id: int) -> HttpResponse:
         if settings.DEBUG:
             raise
 
+    try:
+        REDIS_CLIENT.increment_shows(banner.pk)
+    except:  # noqa: E722
+        if settings.DEBUG:
+            raise
+
     show_time = timestamp.timestamp()
 
     click_params: dict[str, Any] = {
@@ -82,7 +89,6 @@ def handle_click(request: HttpRequest, banner_id: int) -> HttpResponse:
     click_time = now()
     time_to_click = (click_time.timestamp() - show_time) if show_time else None
 
-    # Логируем клик
     try:
         CH_CLIENT.log_click(
             show_event_id=uuid.UUID(show_uuid),
@@ -93,6 +99,12 @@ def handle_click(request: HttpRequest, banner_id: int) -> HttpResponse:
             referer_url=request.META.get('HTTP_REFERER'),
         )
     except ClickHouseWriteError:
+        if settings.DEBUG:
+            raise
+
+    try:
+        REDIS_CLIENT.increment_clicks(banner.pk)
+    except:  # noqa: E722
         if settings.DEBUG:
             raise
 

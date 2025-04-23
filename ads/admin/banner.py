@@ -8,6 +8,7 @@ from django_json_widget.widgets import JSONEditorWidget  # pyright: ignore[repor
 
 from ads.models import Banner, Campaign, User2Client
 from ads.permissions import check_client_permission
+from ads.redis import REDIS_CLIENT
 
 
 class BannerForm(forms.ModelForm):
@@ -86,8 +87,14 @@ class BannerAdmin(admin.ModelAdmin[Banner]):
                 ).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def clicks(self, obj: Banner) -> int | None:
+        return REDIS_CLIENT.get_clicks(obj.pk)
+
+    def shows(self, obj: Banner) -> int | None:
+        return REDIS_CLIENT.get_shows(obj.pk)
+
     def get_readonly_fields(self, request: HttpRequest, obj: Banner | None = None):
-        readonly = ['created_at']
+        readonly = ['created_at', 'clicks', 'shows']
         if obj and not request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
             readonly.append('campaign')
         return readonly

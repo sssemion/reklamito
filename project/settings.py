@@ -143,3 +143,10 @@ CH_DATABASE: str = env.str('CH_DATABASE')  # pyright: ignore
 CH_PASSWORD: str = env.str('CH_PASSWORD')  # pyright: ignore
 _ch_ssl_cert_path: str | None = env.str('CH_SSL_CERTIFICATE_PATH', None)  # pyright: ignore
 CH_SSL_CERTIFICATE_PATH: Path | None = Path(_ch_ssl_cert_path) if _ch_ssl_cert_path else None  # pyright: ignore
+
+REDIS_DATABASE: int = env.int('REDIS_DATABASE')  # pyright: ignore
+REDIS_PASSWORD: str = env.str('REDIS_PASSWORD')  # pyright: ignore
+REDIS_HOST: str = env.str('REDIS_HOST')  # pyright: ignore
+REDIS_PORT: int = env.int('REDIS_PORT')  # pyright: ignore
+_redis_ssl_cert_path: str | None = env.str('REDIS_SSL_CERTIFICATE_PATH', None)  # pyright: ignore
+REDIS_SSL_CERTIFICATE_PATH: Path | None = Path(_redis_ssl_cert_path) if _redis_ssl_cert_path else None  # pyright: ignore
