@@ -9,6 +9,7 @@ COPY myauth app/myauth
 COPY templates app/templates
 COPY .python-version app/python-version
 COPY manage.py app/manage.py
+COPY pyproject.toml app/pyproject.toml
 COPY uv.lock app/uv.lock
 
 WORKDIR /app
