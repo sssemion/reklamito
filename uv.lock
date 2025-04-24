@@ -159,11 +159,17 @@ dependencies = [
     { name = "django-json-widget" },
     { name = "django-stubs-ext" },
     { name = "django-types" },
-    { name = "gunicorn" },
     { name = "httpagentparser" },
-    { name = "psycopg2" },
-    { name = "psycopg2-binary" },
     { name = "redis" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "psycopg2" },
+]
+prod = [
+    { name = "gunicorn" },
+    { name = "psycopg2-binary" },
 ]
 
 [package.metadata]
@@ -174,11 +180,15 @@ requires-dist = [
     { name = "django-json-widget", specifier = ">=2.0.1" },
     { name = "django-stubs-ext", specifier = ">=5.1.3" },
     { name = "django-types", specifier = ">=0.20.0" },
-    { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "httpagentparser", specifier = ">=1.9.5" },
-    { name = "psycopg2", specifier = ">=2.9.10" },
-    { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "redis", specifier = ">=5.2.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "psycopg2", specifier = ">=2.9.10" }]
+prod = [
+    { name = "gunicorn", specifier = ">=23.0.0" },
+    { name = "psycopg2-binary", specifier = ">=2.9.10" },
 ]
 
 [[package]]
