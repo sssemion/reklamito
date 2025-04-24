@@ -1,0 +1,25 @@
+name: Reklamito release
+
+on:
+  release:
+    types: [created]
+
+  workflow_dispatch: # debug
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Yandex Cloud CR "Login"
+        uses: yc-actions/yc-cr-login@v2.0.0
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+      - name: Build, tag, and push image to Yandex Cloud Container Registry
+        env:
+            CR_REGISTRY: crptfvi1d6vn8j66rma9
+            CR_REPO: reklamito
+            IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG
