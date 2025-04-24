@@ -128,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT: Path = env.path('STATIC_ROOT', Path(os.environ['STATIC_ROOT']))  # pyright: ignore
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

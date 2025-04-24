@@ -20,6 +20,7 @@ COPY uv.lock app/uv.lock
 
 WORKDIR /app
 
+ENV STATIC_ROOT="/usr/share/reklamito/static"
 ENV DJANGO_SECRET_KEY="collectstatic_only"
 RUN uv run --group prod manage.py collectstatic --noinput
 ENV DJANGO_SECRET_KEY=""
