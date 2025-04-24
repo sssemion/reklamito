@@ -14,6 +14,6 @@ COPY uv.lock app/uv.lock
 
 WORKDIR /app
 
-RUN uv run manage.py collectstatic --noinput
+RUN uv run --group prod manage.py collectstatic --noinput
 
-CMD ["gunicorn", "project.wsgi:application", "--bind", "127.0.0.1:8841"]
+CMD ["uv", "run", "--group", "prod", "gunicorn", "project.wsgi:application", "--bind", "127.0.0.1:8841"]
