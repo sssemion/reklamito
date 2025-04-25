@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # apps
 CH_HOST: str = env.str('CH_HOST', os.environ.get('CH_HOST'))  # pyright: ignore
-CH_PORT: int = env.int('CH_PORT', int(os.environ.get('CH_PORT')))  # pyright: ignore
+CH_PORT: int = env.int('CH_PORT', int(os.environ.get('CH_PORT', 0)))  # pyright: ignore
 CH_USER: str = env.str('CH_USER', os.environ.get('CH_USER'))  # pyright: ignore
 CH_DATABASE: str = env.str('CH_DATABASE', os.environ.get('CH_DATABASE'))  # pyright: ignore
 CH_PASSWORD: str = env.str('CH_PASSWORD', os.environ.get('CH_PASSWORD'))  # pyright: ignore
@@ -148,6 +148,6 @@ CH_SSL_CERTIFICATE_PATH: Path | None = Path(_ch_ssl_cert_path) if _ch_ssl_cert_p
 REDIS_DATABASE: int = env.int('REDIS_DATABASE', int(os.environ.get('REDIS_DATABASE', 0)))  # pyright: ignore
 REDIS_PASSWORD: str = env.str('REDIS_PASSWORD', os.environ.get('REDIS_PASSWORD'))  # pyright: ignore
 REDIS_HOST: str = env.str('REDIS_HOST', os.environ.get('REDIS_HOST'))  # pyright: ignore
-REDIS_PORT: int = env.int('REDIS_PORT', int(os.environ.get('REDIS_PORT')))  # pyright: ignore
+REDIS_PORT: int = env.int('REDIS_PORT', int(os.environ.get('REDIS_PORT', 0)))  # pyright: ignore
 _redis_ssl_cert_path: str | None = env.str('REDIS_SSL_CERTIFICATE_PATH', os.environ.get('REDIS_SSL_CERTIFICATE_PATH', None))  # pyright: ignore
 REDIS_SSL_CERTIFICATE_PATH: Path | None = Path(_redis_ssl_cert_path) if _redis_ssl_cert_path else None  # pyright: ignore
