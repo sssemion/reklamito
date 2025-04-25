@@ -25,4 +25,4 @@ ENV DJANGO_SECRET_KEY="collectstatic_only"
 RUN uv run --group prod manage.py collectstatic --noinput
 ENV DJANGO_SECRET_KEY=""
 
-CMD ["uv", "run", "--group", "prod", "gunicorn", "project.wsgi:application", "--bind", "127.0.0.1:8841"]
+CMD ["uv", "run", "--group", "prod", "gunicorn", "project.wsgi:application"]
