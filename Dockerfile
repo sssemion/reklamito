@@ -21,8 +21,6 @@ RUN mkdir -p /usr/local/share/ca-certificates/Yandex/redis && \
     --output-document /usr/local/share/ca-certificates/Yandex/redis/RootCA.crt
 ENV REDIS_SSL_CERTIFICATE_PATH=/usr/local/share/ca-certificates/Yandex/redis/RootCA.crt
 
-RUN ln -s .env /config/.env
-
 COPY project app/project
 COPY ads app/ads
 COPY billing app/billing
@@ -36,6 +34,7 @@ COPY uv.lock app/uv.lock
 
 WORKDIR /app
 
+RUN ln -s /config/.env .env
 COPY in.nginx /etc/nginx/sites-enabled/default
 
 ENV STATIC_ROOT="/usr/share/reklamito/static"
