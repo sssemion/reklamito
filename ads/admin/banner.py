@@ -4,6 +4,8 @@ from django import forms
 from django.contrib import admin
 from django.db.models import ForeignKey, Q, QuerySet
 from django.http import HttpRequest
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django_json_widget.widgets import JSONEditorWidget  # pyright: ignore[reportMissingTypeStubs]
 
 from ads.models import Banner, Campaign, User2Client
@@ -93,8 +95,14 @@ class BannerAdmin(admin.ModelAdmin[Banner]):
     def shows(self, obj: Banner) -> int | None:
         return REDIS_CLIENT.get_shows(obj.pk)
 
+    def show_url(self, obj: Banner) -> str | None:
+        url = reverse('show_banner', args=[obj.pk])
+        return mark_safe(f'<a href="{url}">Ссылка на встраиваемый баннер</a>')
+
+    show_url.allow_tags = True
+
     def get_readonly_fields(self, request: HttpRequest, obj: Banner | None = None):
-        readonly = ['created_at', 'clicks', 'shows']
+        readonly = ['created_at', 'clicks', 'shows', 'show_url']
         if obj and not request.user.is_superuser:  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType]
             readonly.append('campaign')
         return readonly
