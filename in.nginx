@@ -1,7 +1,13 @@
 server {
-    # Редирект с HTTP на HTTPS
     listen 80 default_server;
     listen [::]:80 default_server;
+
+    location /static/ {
+        alias /usr/share/reklamito/static/;
+        expires 30d;
+        access_log off;
+        add_header Cache-Control "public";
+    }
 
     location / {
         proxy_pass http://localhost:8841;
