@@ -1,10 +1,9 @@
 name: Reklamito release
 
 on:
-  release:
-    types: [created]
-
-  workflow_dispatch: # debug
+  push:
+    tags:
+      - 'v\d+\.\d+(\.\d+)?'
 
 jobs:
   build:
@@ -19,7 +18,7 @@ jobs:
         env:
             CR_REGISTRY: crptfvi1d6vn8j66rma9
             CR_REPO: reklamito
-            IMAGE_TAG: ${{ github.sha }}
+            IMAGE_TAG: ${{ github.ref_name }}.${{ github.sha }}
         run: |
           docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG .
           docker push cr.yandex/$CR_REGISTRY/$CR_REPO:$IMAGE_TAG

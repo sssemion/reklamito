@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from typing import Any
 
@@ -29,12 +29,12 @@ environ.Env.read_env(BASE_DIR / '.env')  # pyright: ignore
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')  # pyright: ignore
+SECRET_KEY = env.str('SECRET_KEY', os.environ.get('DJANGO_SECRET_KEY'))  # pyright: ignore
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', False)  # type: ignore[arg-type]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', None, os.environ.get('ALLOWED_HOSTS', '').split(','))  # pyright: ignore
 
 
 # Application definition
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES: dict[str, Any] = {
-    'default': env.db(),  # pyright: ignore
+    'default': env.db('DATABASE_URL', os.environ.get('DATABASE_URL')),  # pyright: ignore
 }
 
 
@@ -128,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT: Path = env.path('STATIC_ROOT', Path(os.environ.get('STATIC_ROOT', '.')))  # pyright: ignore
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -136,17 +137,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # apps
-CH_HOST: str = env.str('CH_HOST')  # pyright: ignore
-CH_PORT: int = env.int('CH_PORT')  # pyright: ignore
-CH_USER: str = env.str('CH_USER')  # pyright: ignore
-CH_DATABASE: str = env.str('CH_DATABASE')  # pyright: ignore
-CH_PASSWORD: str = env.str('CH_PASSWORD')  # pyright: ignore
-_ch_ssl_cert_path: str | None = env.str('CH_SSL_CERTIFICATE_PATH', None)  # pyright: ignore
+CH_HOST: str = env.str('CH_HOST', os.environ.get('CH_HOST'))  # pyright: ignore
+CH_PORT: int = env.int('CH_PORT', int(os.environ.get('CH_PORT', 0)))  # pyright: ignore
+CH_USER: str = env.str('CH_USER', os.environ.get('CH_USER'))  # pyright: ignore
+CH_DATABASE: str = env.str('CH_DATABASE', os.environ.get('CH_DATABASE'))  # pyright: ignore
+CH_PASSWORD: str = env.str('CH_PASSWORD', os.environ.get('CH_PASSWORD'))  # pyright: ignore
+_ch_ssl_cert_path: str | None = env.str('CH_SSL_CERTIFICATE_PATH', os.environ.get('CH_SSL_CERTIFICATE_PATH', None))  # pyright: ignore
 CH_SSL_CERTIFICATE_PATH: Path | None = Path(_ch_ssl_cert_path) if _ch_ssl_cert_path else None  # pyright: ignore
 
-REDIS_DATABASE: int = env.int('REDIS_DATABASE')  # pyright: ignore
-REDIS_PASSWORD: str = env.str('REDIS_PASSWORD')  # pyright: ignore
-REDIS_HOST: str = env.str('REDIS_HOST')  # pyright: ignore
-REDIS_PORT: int = env.int('REDIS_PORT')  # pyright: ignore
-_redis_ssl_cert_path: str | None = env.str('REDIS_SSL_CERTIFICATE_PATH', None)  # pyright: ignore
+REDIS_DATABASE: int = env.int('REDIS_DATABASE', int(os.environ.get('REDIS_DATABASE', 0)))  # pyright: ignore
+REDIS_PASSWORD: str = env.str('REDIS_PASSWORD', os.environ.get('REDIS_PASSWORD'))  # pyright: ignore
+REDIS_HOST: str = env.str('REDIS_HOST', os.environ.get('REDIS_HOST'))  # pyright: ignore
+REDIS_PORT: int = env.int('REDIS_PORT', int(os.environ.get('REDIS_PORT', 0)))  # pyright: ignore
+_redis_ssl_cert_path: str | None = env.str('REDIS_SSL_CERTIFICATE_PATH', os.environ.get('REDIS_SSL_CERTIFICATE_PATH', None))  # pyright: ignore
 REDIS_SSL_CERTIFICATE_PATH: Path | None = Path(_redis_ssl_cert_path) if _redis_ssl_cert_path else None  # pyright: ignore
